@@ -1,3 +1,5 @@
+// I use axios in my day to day for API calls, so, for familiarity's sake,
+// using it here.
 import axios from "axios";
 import { LocationInformation, IpBaseErrorResponse } from "../types/IpBase";
 import { SunriseSunsetResponse } from "../types/SunriseSunset";
@@ -10,11 +12,14 @@ import { SunData } from "../types/SunData";
 export const getSunData = async (ipAddress: string): Promise<SunData | undefined> => {
   const locationInformation = await getLocationInformation(ipAddress);
 
-  if (!locationInformation) {
-    return;
+  if (!locationInformation.locationInformation) {
+    return {
+      locationInformation,
+      sunTimes: undefined,
+    };
   }
 
-  const sunTimes = await getSunTimes(locationInformation as LocationInformation);
+  const sunTimes = await getSunTimes(locationInformation.locationInformation);
   return {
     locationInformation,
     sunTimes,
@@ -23,17 +28,19 @@ export const getSunData = async (ipAddress: string): Promise<SunData | undefined
 
 export const getLocationInformation = async (
   ipAddress: string
-): Promise<LocationInformation | IpBaseErrorResponse> => {
+): Promise<{ locationInformation?: LocationInformation; errors?: IpBaseErrorResponse }> => {
   try {
     const response = await axios.get(
       `https://api.ipbase.com/v2/info?apikey=WJCFtbb1MjRmMhHDOELfqVNRq9HDQJ5kPYaNxlAh&ip=${ipAddress}&language=en`
     );
     const location = response.data.data.location;
-    return location;
+    return {
+      locationInformation: location,
+    };
   } catch (ex) {
     const errorResponse = (ex as any).response.data as IpBaseErrorResponse;
     return {
-      ...errorResponse,
+      errors: errorResponse,
     };
   }
 };

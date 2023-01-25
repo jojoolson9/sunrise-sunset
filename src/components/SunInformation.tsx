@@ -1,13 +1,11 @@
+import { useAppContext } from "../state/AppContext";
 import { LocationInformation } from "../types/IpBase";
 import { SunriseSunsetResponse } from "../types/SunriseSunset";
 
-interface SunInformationProps {
-  location: LocationInformation;
-  sun?: SunriseSunsetResponse;
-}
+const SunInformation = () => {
+  const { loadingState, sunTimes, locationInformation } = useAppContext();
 
-const SunInformation = (props: SunInformationProps) => {
-  if (!props.sun) {
+  if (!showSunInformation(loadingState, sunTimes, locationInformation)) {
     return <></>;
   }
 
@@ -25,17 +23,33 @@ const SunInformation = (props: SunInformationProps) => {
   return (
     <div className="row">
       <div className="alert alert-success" role="alert">
-        <h4 className="alert-heading">{formatLocation(props.location)}</h4>
+        <h4 className="alert-heading">{formatLocation(locationInformation!)}</h4>
         <br />
-        The sun will rise at <b>{props.sun.sunrise} UTC</b>
+        {/*
+          The bang ! is used to indicate that we know for sure this will be defined.
+          Since we make the check earlier to hide this component if there is no sun
+          information, we know that, if it reaches this code, it is defined.
+        */}
+        The sun will rise at <b>{sunTimes!.sunrise} UTC</b>
         <br />
-        The sun will set at <b>{props.sun.sunset} UTC</b>
+        The sun will set at <b>{sunTimes!.sunset} UTC</b>
         <br />
       </div>
     </div>
   );
 };
 
+const showSunInformation = (
+  loadingState: boolean,
+  sun?: SunriseSunsetResponse,
+  locationInformation?: LocationInformation
+) => {
+  // If there is no sun information or if we are loading the new
+  // sun information, we don't want to show the success alert
+  return locationInformation && sun && sun.sunrise && sun.sunset && !loadingState;
+};
+
+// Pulled this logic out for cleaner visibility in the component
 const formatLocation = (location: LocationInformation) => {
   let locationString = "";
 

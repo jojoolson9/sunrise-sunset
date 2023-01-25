@@ -1,27 +1,20 @@
-import { useState } from "react";
 import SubmitButton from "./SubmitButton";
 import TextInput from "./TextInput";
-import { SunData } from "../types/SunData";
+import LoadingMessage from "./LoadingMessage";
 
-interface IpInputFormProps {
-  setSunData: (response?: SunData) => void;
-}
-
-const IpInputForm = (props: IpInputFormProps) => {
-  const [currentIp, setCurrentIp] = useState<string | undefined>();
-  const handleInputChange = (inputText: string) => {
-    setCurrentIp(inputText);
-  };
-
+const IpInputForm = () => {
   return (
-    <div className="row align-items-end mb-3">
-      <div className="col-9">
-        <TextInput handleChange={handleInputChange} />
+    <>
+      <div className="row align-items-end mb-3">
+        <div className="col-9">
+          <TextInput />
+        </div>
+        <div className="col-3">
+          <SubmitButton />
+        </div>
       </div>
-      <div className="col-3">
-        <SubmitButton ipAddress={currentIp} setSunData={props.setSunData} />
-      </div>
-    </div>
+      <LoadingMessage />
+    </>
   );
 };
 

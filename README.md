@@ -42,8 +42,8 @@ When requiring an API key for use to call a service, it is best practice to neve
 
 ## Providers / Contexts
 
-My favorite way to deal with complex states is to use React's in-house providers/contexts. While the state management for this app was extremely minimal, a more complex version with more capabilities could warrant its implementation. A future iteration of feature growth would be to set that up.
+My favorite way to deal with complex states is to use React's in-house providers/contexts. While the state management for this app was relatively minimal, I wanted to add it in to showcase its usage capabilities. A lot of older React projects utilize Redux, but I personally believe that Contexts are much cleaner and easier to read.
 
 ## Total Time
 
-Overall, this app took me about 4 hours to build.
+Overall, this app took me about 4-5 hours to build.

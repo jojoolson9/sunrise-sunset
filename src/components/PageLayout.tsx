@@ -1,11 +1,7 @@
-import { useState } from "react";
 import IpInputForm from "./IpInputForm";
-import { SunData } from "../types/SunData";
 import DataDisplay from "./DataInformation";
 
 const PageLayout = () => {
-  const [sunData, setSunData] = useState<SunData | undefined>();
-
   return (
     <>
       <div className="text-muted w-100 text-lg-center">
@@ -13,8 +9,8 @@ const PageLayout = () => {
         sunset in your area!
       </div>
       <hr />
-      <IpInputForm setSunData={setSunData} />
-      <DataDisplay sunData={sunData} />
+      <IpInputForm />
+      <DataDisplay />
     </>
   );
 };

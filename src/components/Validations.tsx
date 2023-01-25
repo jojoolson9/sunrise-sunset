@@ -1,20 +1,17 @@
-import { IpBaseErrorResponse } from "../types/IpBase";
+import { useAppContext } from "../state/AppContext";
 
-interface ValidationsProps {
-  locationErrors: IpBaseErrorResponse;
-}
-
-const Validations = (props: ValidationsProps) => {
+const Validations = () => {
+  const { errorState } = useAppContext();
   // Adding proper validations for the response from sunrise-sunset
   // would be a good next step as well. I built out an example
   // using the response from the IP Base errors. I did not dig
   // extremely into the various status code responses, so this
   // error handling may not be extensive enough.
-  if (!props.locationErrors?.message) {
+  if (!errorState?.message) {
     return <></>;
   }
 
-  const { message, errors, info } = props.locationErrors;
+  const { message, errors, info } = errorState;
   return (
     <div className="row">
       <div className="alert alert-danger" role="alert">

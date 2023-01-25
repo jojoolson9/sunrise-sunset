@@ -3,5 +3,8 @@ import { SunriseSunsetResponse } from "./SunriseSunset";
 
 export interface SunData {
   sunTimes?: SunriseSunsetResponse;
-  locationInformation: LocationInformation | IpBaseErrorResponse;
+  locationInformation: {
+    errors?: IpBaseErrorResponse;
+    locationInformation?: LocationInformation;
+  };
 }

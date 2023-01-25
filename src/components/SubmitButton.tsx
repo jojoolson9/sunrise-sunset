@@ -1,32 +1,33 @@
-import { useEffect, useState } from "react";
 import { getSunData } from "../utils/SubmitButton";
-import { SunData } from "../types/SunData";
+import { useAppContext } from "../state/AppContext";
 
-interface SubmitButtonProps {
-  ipAddress?: string;
-  setSunData: (response?: SunData) => void;
-}
-
-const SubmitButton = (props: SubmitButtonProps) => {
-  const [isDisabled, setIsDisabled] = useState<boolean>(!props.ipAddress);
-
-  // Rerender button to enabled if IP Address is filled out
-  useEffect(() => {
-    setIsDisabled(!props.ipAddress);
-  }, [props.ipAddress]);
+const SubmitButton = () => {
+  const {
+    ipAddress,
+    updateErrorState,
+    updateLoadingState,
+    loadingState,
+    updateLocationInformation,
+    updateSunTimes,
+  } = useAppContext();
 
   const updateSunData = async () => {
-    setIsDisabled(true); // We don't want users hammering the button, so disable it while it makes it's calls
+    // We don't want users hammering the button, so disable it while it makes it's calls
+    updateLoadingState(true);
 
-    const sunData = await getSunData(props.ipAddress!);
-    props.setSunData(sunData);
+    // We know ipAddress is defined, because otherwise the button would be disabled
+    const sunData = await getSunData(ipAddress!);
+    updateSunTimes(sunData?.sunTimes);
+    updateLocationInformation(sunData?.locationInformation.locationInformation);
+    updateErrorState(sunData?.locationInformation.errors);
 
-    setIsDisabled(false); // Re-enable after the call succeeds/fails
+    // Re-enable after the call succeeds/fails
+    updateLoadingState(false);
   };
 
   return (
     <button
-      disabled={isDisabled}
+      disabled={loadingState || !ipAddress}
       onClick={() => updateSunData()}
       className="btn btn-primary w-100 py-3"
     >

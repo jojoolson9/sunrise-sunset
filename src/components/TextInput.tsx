@@ -1,14 +1,13 @@
 import questionSvg from "../images/question.svg";
+import { useAppContext } from "../state/AppContext";
 
 // This component could easily become re-usable if we
 // wanted to pass in the various labels as props instead
 // of hardcoding them for this specific use case.
 
-interface TextInputProps {
-  handleChange: (textInput: string) => void;
-}
+const TextInput = () => {
+  const { updateIpAddress } = useAppContext();
 
-const TextInput = (props: TextInputProps) => {
   return (
     <>
       <div className="mb-1 d-flex align-items-center">
@@ -33,7 +32,7 @@ const TextInput = (props: TextInputProps) => {
         className="form-control py-3"
         type="text"
         placeholder="Enter your IP Address"
-        onChange={(e) => props.handleChange(e.target.value)}
+        onChange={(e) => updateIpAddress(e.target.value)}
       />
     </>
   );
